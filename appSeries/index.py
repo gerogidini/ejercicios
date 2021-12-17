@@ -32,6 +32,10 @@ class AppSerie:
 		self.tabla.heading('#0', text = "Serie", anchor = CENTER)
 		self.tabla.heading('#1', text = "Temporadas vistas", anchor = CENTER)
 
+		#Boton borrar
+		ttk.Button(text = "BORRAR", command = self.eliminarSerie).grid(row = 5, column = 0, sticky = W + E)
+		ttk.Button(text = "EDITAR", command = self.editarSerie).grid(row = 5, column = 1, sticky = W + E)
+
 		self.mostrarSeries()
 
 	def run_query(self, query, parametros = ()):
@@ -58,9 +62,29 @@ class AppSerie:
 		self.run_query(query,parametros)
 		self.mostrarSeries()
 
+	def eliminarSerie(self):
+		elemento_eliminar = self.tabla.item(self.tabla.selection())['values']
+		query = 'DELETE FROM serie WHERE temporadas = ?'
+		self.run_query(query, elemento_eliminar)
+		self.mostrarSeries()
 
-		
+	def editarSerie(self):
+		elemento_editar = self.tabla.item(self.tabla.selection())
+		nombre_actual = elemento_editar['text']
+		temp_actual = elemento_editar['values'][0]
+		self.ventana_editar = Toplevel()
+		#Nombre nuevo
+		Label(self.ventana_editar, text = "Nombre actual: " + nombre_actual).grid(row = 0, column = 0)
+		Label(self.ventana_editar, text = "Nombre nuevo: ").grid(row = 1, column = 0)
+		nombre_nuevo = Entry(self.ventana_editar)
+		nombre_nuevo.grid(row = 1, column = 1)
+		#Temporada nueva
+		Label(self.ventana_editar, text = "Temporada actual: " + str(temp_actual)).grid(row = 2, column = 0)
+		Label(self.ventana_editar, text = "Temporada nueva: ").grid(row = 3, column = 0)
+		temporada_nueva = Entry(self.ventana_editar)
+		temporada_nueva.grid(row = 3, column = 1)
 
+		Button(self.ventana_editar, text = "CONFIRMAR").grid(row = 6, column = 0)
 
 
 ventana = Tk()

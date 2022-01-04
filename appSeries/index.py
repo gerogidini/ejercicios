@@ -84,7 +84,14 @@ class AppSerie:
 		temporada_nueva = Entry(self.ventana_editar)
 		temporada_nueva.grid(row = 3, column = 1)
 
-		Button(self.ventana_editar, text = "CONFIRMAR").grid(row = 6, column = 0)
+		Button(self.ventana_editar, text = "CONFIRMAR", command = lambda: self.editarValores(nombre_nuevo.get(), temporada_nueva.get(), nombre_actual, temp_actual)).grid(row = 6, column = 0)
+
+	def editarValores(self, nombreNuevo, temporadaNueva, nombreActual, tempActual):
+		query = 'UPDATE serie SET serie = ?, temporadas = ? WHERE serie = ? AND temporadas = ?'
+		parametros = (nombreNuevo, temporadaNueva, nombreActual, tempActual)
+		self.run_query(query, parametros)
+		self.ventana_editar.destroy()
+		self.mostrarSeries()
 
 
 ventana = Tk()
